@@ -70,13 +70,13 @@
     imageCanvas.addEventListener('touchstart', (event) => {
       isTouchPressed = true;
       touchX = event.touches[0].clientX - imageCanvas.getBoundingClientRect().left;
-      event.preventDefault(); 
+      event.preventDefault(); // Prevent default touch behavior
     });
 
     imageCanvas.addEventListener('touchend', () => {
       isTouchPressed = false;
       accumulatedMovement = 0; // Reset accumulated movement when the touch is released
-      event.preventDefault(); 
+      event.preventDefault(); // Prevent default touch behavior
     });
 
     imageCanvas.addEventListener('touchmove', (event) => {
@@ -91,11 +91,11 @@
         if (accumulatedMovement >= rotationThreshold) {
           // Change the image only when the accumulated movement exceeds the threshold
           if (newTouchX > touchX) {
-            // Move to the next image
-            imageIndex = (imageIndex + 1) % images.length;
-          } else if (newTouchX < touchX) {
-            // Move to the previous image
-            imageIndex = (imageIndex - 1 + images.length) % images.length;
+              // Move to the previous image
+              imageIndex = (imageIndex - 1 + images.length) % images.length;
+            } else if (newTouchX < touchX) {
+                // Move to the next image
+                imageIndex = (imageIndex + 1) % images.length;
           }
 
           // Load and display the new image centered
@@ -134,11 +134,11 @@
         if (accumulatedMovement >= rotationThreshold) {
           // Change the image only when the accumulated movement exceeds the threshold
           if (newMouseX > mouseX) {
-            // Move to the next image
+              // Move to the previous image
+              imageIndex = (imageIndex - 1 + images.length) % images.length;
+            } else if (newMouseX < mouseX) {
+                // Move to the next image
             imageIndex = (imageIndex + 1) % images.length;
-          } else if (newMouseX < mouseX) {
-            // Move to the previous image
-            imageIndex = (imageIndex - 1 + images.length) % images.length;
           }
 
           // Load and display the new image centered
