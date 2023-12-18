@@ -21,6 +21,7 @@
   <script>
     const imageCanvas = document.getElementById('imageCanvas');
     const ctx = imageCanvas.getContext('2d');
+    const pixelRatio = window.devicePixelRatio || 1
     let isMousePressed = false;
     let mouseX = 0;
     let accumulatedMovement = 0;
@@ -59,9 +60,8 @@
         'res/30.png'
     ];
 
-    
-    if (window.innerWidth < 400 ) imageCanvas.width = window.innerWidth - 20
-    
+    if (window.innerWidth / pixelRatio < 400 ) imageCanvas.width = window.innerWidth - 20
+
     // Load the initial image
     loadImage(images[imageIndex]);
     
@@ -155,8 +155,6 @@
     function loadImage(src, x = 0, y = 0) {
       const img = new Image();
       img.src = src;
-      if (window.innerWidth < 400 ) imageCanvas.width = window.innerWidth - 20
-
 
       img.onload = function () {
         // Clear the canvas
