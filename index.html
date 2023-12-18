@@ -10,7 +10,7 @@
       cursor: pointer;
     }
     .custom-cursor {
-      cursor: w-resize; /* Set your custom cursor style here */
+      cursor: w-resize; 
     }
   </style>
 </head>
@@ -26,43 +26,89 @@
     let accumulatedMovement = 0;
     const rotationThreshold = 10; // Adjust this threshold to control rotation speed
     let imageIndex = 0; // Index of the current image
-    let img;
+    let imgWidth;
     const images = [
         'res/1.png',
-      'res/2.png',
-      'res/3.png',
-      'res/4.png',
-      'res/5.png',
-      'res/6.png',
-      'res/7.png',
-      'res/8.png',
-      'res/9.png',
-      'res/10.png',
-      'res/11.png',
-      'res/12.png',
-      'res/13.png',
-      'res/14.png',
-      'res/15.png',
-      'res/16.png',
-      'res/17.png',
-      'res/18.png',
-      'res/19.png',
-      'res/20.png',
-      'res/21.png',
-      'res/22.png',
-      'res/23.png',
-      'res/24.png',
-      'res/25.png',
-      'res/26.png',
-      'res/27.png',
-      'res/28.png',
-      'res/29.png',
-      'res/30.png'
-      // Add more images as needed
+        'res/2.png',
+        'res/3.png',
+        'res/4.png',
+        'res/5.png',
+        'res/6.png',
+        'res/7.png',
+        'res/8.png',
+        'res/9.png',
+        'res/10.png',
+        'res/11.png',
+        'res/12.png',
+        'res/13.png',
+        'res/14.png',
+        'res/15.png',
+        'res/16.png',
+        'res/17.png',
+        'res/18.png',
+        'res/19.png',
+        'res/20.png',
+        'res/21.png',
+        'res/22.png',
+        'res/23.png',
+        'res/24.png',
+        'res/25.png',
+        'res/26.png',
+        'res/27.png',
+        'res/28.png',
+        'res/29.png',
+        'res/30.png'
     ];
 
+    
+    if (window.window.innerWidth < 400 ) imageCanvas.width = window.window.innerWidth - 20
+    
     // Load the initial image
     loadImage(images[imageIndex]);
+    
+    // Change the image on touch move
+    imageCanvas.addEventListener('touchstart', (event) => {
+      isTouchPressed = true;
+      touchX = event.touches[0].clientX - imageCanvas.getBoundingClientRect().left;
+      event.preventDefault(); 
+    });
+
+    imageCanvas.addEventListener('touchend', () => {
+      isTouchPressed = false;
+      accumulatedMovement = 0; // Reset accumulated movement when the touch is released
+      event.preventDefault(); 
+    });
+
+    imageCanvas.addEventListener('touchmove', (event) => {
+      if (isTouchPressed) {
+        // Update the touchX position
+        const newTouchX = event.touches[0].clientX - imageCanvas.getBoundingClientRect().left;
+
+        // Accumulate the touch movement
+        accumulatedMovement += Math.abs(newTouchX - touchX);
+
+        // Change the image based on the accumulated movement
+        if (accumulatedMovement >= rotationThreshold) {
+          // Change the image only when the accumulated movement exceeds the threshold
+          if (newTouchX > touchX) {
+            // Move to the next image
+            imageIndex = (imageIndex + 1) % images.length;
+          } else if (newTouchX < touchX) {
+            // Move to the previous image
+            imageIndex = (imageIndex - 1 + images.length) % images.length;
+          }
+
+          // Load and display the new image centered
+          loadImage(images[imageIndex]);
+
+          // Reset accumulated movement after changing the image
+          accumulatedMovement = 0;
+        }
+
+        // Update the touchX position
+        touchX = newTouchX;
+      }
+    });
 
     // Change the image on mouse move
     imageCanvas.addEventListener('mousedown', () => {
@@ -107,7 +153,7 @@
       }
     });
 
-    function loadImage(src, x = -70, y = 0) {
+    function loadImage(src, x = 0, y = 0) {
       const img = new Image();
       img.src = src;
 
@@ -116,7 +162,7 @@
         ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
 
         // Draw the image on the canvas at the specified position
-        ctx.drawImage(img, x, y, img.width, img.height);
+        ctx.drawImage(img, (imageCanvas.width - img.width) / 2, y, img.width, img.height);
       };
     }
   </script>
