@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Image on Mouse Hold</title>
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .custom-cursor {
+      cursor: w-resize; /* Set your custom cursor style here */
+    }
+  </style>
+</head>
+<body>
+    <h1>Тест вращения картинки</h1>
+  <canvas id="imageCanvas" width="400" height="400"></canvas>
+
+  <script>
+    const imageCanvas = document.getElementById('imageCanvas');
+    const ctx = imageCanvas.getContext('2d');
+    let isMousePressed = false;
+    let mouseX = 0;
+    let accumulatedMovement = 0;
+    const rotationThreshold = 10; // Adjust this threshold to control rotation speed
+    let imageIndex = 0; // Index of the current image
+    let img;
+    const images = [
+        'res/1.png',
+      'res/2.png',
+      'res/3.png',
+      'res/4.png',
+      'res/5.png',
+      'res/6.png',
+      'res/7.png',
+      'res/8.png',
+      'res/9.png',
+      'res/10.png',
+      'res/11.png',
+      'res/12.png',
+      'res/13.png',
+      'res/14.png',
+      'res/15.png',
+      'res/16.png',
+      'res/17.png',
+      'res/18.png',
+      'res/19.png',
+      'res/20.png',
+      'res/21.png',
+      'res/22.png',
+      'res/23.png',
+      'res/24.png',
+      'res/25.png',
+      'res/26.png',
+      'res/27.png',
+      'res/28.png',
+      'res/29.png',
+      'res/30.png'
+      // Add more images as needed
+    ];
+
+    // Load the initial image
+    loadImage(images[imageIndex]);
+
+    // Change the image on mouse move
+    imageCanvas.addEventListener('mousedown', () => {
+      isMousePressed = true;
+      imageCanvas.classList.add('custom-cursor')
+    });
+
+    imageCanvas.addEventListener('mouseup', () => {
+      isMousePressed = false;
+      accumulatedMovement = 0; // Reset accumulated movement when the mouse is released
+      imageCanvas.classList.remove('custom-cursor')
+    });
+
+    imageCanvas.addEventListener('mousemove', (event) => {
+      if (isMousePressed) {
+        // Update the mouseX position
+        const newMouseX = event.clientX - imageCanvas.getBoundingClientRect().left;
+
+        // Accumulate the mouse movement
+        accumulatedMovement += Math.abs(newMouseX - mouseX);
+
+        // Change the image based on the accumulated movement
+        if (accumulatedMovement >= rotationThreshold) {
+          // Change the image only when the accumulated movement exceeds the threshold
+          if (newMouseX > mouseX) {
+            // Move to the next image
+            imageIndex = (imageIndex + 1) % images.length;
+          } else if (newMouseX < mouseX) {
+            // Move to the previous image
+            imageIndex = (imageIndex - 1 + images.length) % images.length;
+          }
+
+          // Load and display the new image centered
+          loadImage(images[imageIndex]);
+
+          // Reset accumulated movement after changing the image
+          accumulatedMovement = 0;
+        }
+
+        // Update the mouseX position
+        mouseX = newMouseX;
+      }
+    });
+
+    function loadImage(src, x = -70, y = 0) {
+      const img = new Image();
+      img.src = src;
+
+      img.onload = function () {
+        // Clear the canvas
+        ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+
+        // Draw the image on the canvas at the specified position
+        ctx.drawImage(img, x, y, img.width, img.height);
+      };
+    }
+  </script>
+</body>
+</html>
