@@ -26,7 +26,6 @@
     let accumulatedMovement = 0;
     const rotationThreshold = 10; // Adjust this threshold to control rotation speed
     let imageIndex = 0; // Index of the current image
-    let imgWidth;
     const images = [
         'res/1.png',
         'res/2.png',
@@ -61,7 +60,7 @@
     ];
 
     
-    if (window.window.innerWidth < 400 ) imageCanvas.width = window.window.innerWidth - 20
+    if (window.innerWidth < 400 ) imageCanvas.width = window.innerWidth - 20
     
     // Load the initial image
     loadImage(images[imageIndex]);
@@ -156,6 +155,8 @@
     function loadImage(src, x = 0, y = 0) {
       const img = new Image();
       img.src = src;
+      if (window.innerWidth < 400 ) imageCanvas.width = window.innerWidth - 20
+
 
       img.onload = function () {
         // Clear the canvas
